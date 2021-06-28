@@ -67,7 +67,7 @@ variables {K : Type*} [field K] [algebra R K] [is_fraction_ring R K]
 
 lemma is_primitive.is_unit_iff_is_unit_map {p : polynomial R} (hp : p.is_primitive) :
   is_unit p ↔ is_unit (p.map (algebra_map R K)) :=
-hp.is_unit_iff_is_unit_map_of_injective is_fraction_ring.injective
+hp.is_unit_iff_is_unit_map_of_injective (is_fraction_ring.injective _ _)
 
 open is_localization
 
@@ -83,7 +83,7 @@ begin
     ← ring_hom.map_mul, is_unit_iff],
   refine ⟨algebra_map R K ((integer_normalization R⁰ p).content * ↑u),
     is_unit_iff_ne_zero.2 (λ con, _), by simp⟩,
-  replace con := (algebra_map R K).injective_iff.1 is_fraction_ring.injective _ con,
+  replace con := (algebra_map R K).injective_iff.1 (is_fraction_ring.injective _ _) _ con,
   rw [mul_eq_zero, content_eq_zero_iff, is_fraction_ring.integer_normalization_eq_zero_iff] at con,
   rcases con with con | con,
   { apply h0 con },
@@ -97,7 +97,7 @@ theorem is_primitive.irreducible_iff_irreducible_map_fraction_map
   irreducible p ↔ irreducible (p.map (algebra_map R K)) :=
 begin
   refine ⟨λ hi, ⟨λ h, hi.not_unit (hp.is_unit_iff_is_unit_map.2 h), λ a b hab, _⟩,
-    hp.irreducible_of_irreducible_map_of_injective is_fraction_ring.injective⟩,
+    hp.irreducible_of_irreducible_map_of_injective (is_fraction_ring.injective _ _)⟩,
   obtain ⟨⟨c, c0⟩, hc⟩ := integer_normalization_map_to_map R⁰ a,
   obtain ⟨⟨d, d0⟩, hd⟩ := integer_normalization_map_to_map R⁰ b,
   rw [algebra.smul_def, algebra_map_apply, subtype.coe_mk] at hc hd,
@@ -105,7 +105,7 @@ begin
   have hcd0 : c * d ≠ 0 := mul_ne_zero c0 d0,
   rw [ne.def, ← C_eq_zero] at hcd0,
   have h1 : C c * C d * p = integer_normalization R⁰ a * integer_normalization R⁰ b,
-  { apply map_injective (algebra_map R K) is_fraction_ring.injective _,
+  { apply map_injective (algebra_map R K) (is_fraction_ring.injective _ _) _,
     rw [map_mul, map_mul, map_mul, hc, hd, map_C, map_C, hab],
     ring },
   obtain ⟨u, hu⟩ : associated (c * d) (content (integer_normalization R⁰ a) *
@@ -123,7 +123,7 @@ begin
   { classical,
     rw [ne.def, ne.def, ← decidable.not_or_iff_and_not, ← mul_eq_zero, ← hab],
     intro con,
-    apply hp.ne_zero (map_injective (algebra_map R K) is_fraction_ring.injective _),
+    apply hp.ne_zero (map_injective (algebra_map R K) (is_fraction_ring.injective _ _) _),
     simp [con] },
   rcases hi.is_unit_or_is_unit (mul_left_cancel' hcd0 h1).symm with h | h,
   { right,
@@ -142,7 +142,7 @@ begin
   rw [subtype.coe_mk, algebra.smul_def, algebra_map_apply] at hs,
   have h : p ∣ q * C s,
   { use (integer_normalization R⁰ r),
-    apply map_injective (algebra_map R K) is_fraction_ring.injective,
+    apply map_injective (algebra_map R K) (is_fraction_ring.injective _ _),
     rw [map_mul, map_mul, hs, hr, mul_assoc, mul_comm r],
     simp },
   rw [← hp.dvd_prim_part_iff_dvd, prim_part_mul, hq.prim_part_eq, dvd_iff_dvd_of_rel_right] at h,
