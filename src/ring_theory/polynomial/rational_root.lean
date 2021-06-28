@@ -43,8 +43,7 @@ lemma num_is_root_scale_roots_of_aeval_eq_zero
   [unique_factorization_monoid A] {p : polynomial A} {x : K} (hr : aeval x p = 0) :
   is_root (scale_roots p (denom A x)) (num A x) :=
 begin
-  apply is_root_of_eval₂_map_eq_zero
-    (is_fraction_ring.injective : function.injective (algebra_map A K)),
+  apply is_root_of_eval₂_map_eq_zero (is_fraction_ring.injective A K),
   refine scale_roots_aeval_eq_zero_of_aeval_mk'_eq_zero _,
   rw mk'_num_denom,
   exact hr
